@@ -20,7 +20,7 @@ jobs:
 
     - name: Run Trivy vulnerability scan
       run: |
-        trivy image --format json --output trivy-report.json ${{ github.repository }}
+        trivy fs --format json --output trivy-report.json .
 
     - name: Upload report to GitHub
       uses: actions/upload-artifact@v2
