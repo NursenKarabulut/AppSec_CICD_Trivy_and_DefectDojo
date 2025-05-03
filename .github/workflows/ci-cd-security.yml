@@ -1,0 +1,29 @@
+name: AppSec CI/CD Security Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Trivy
+      run: |
+        curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.38.3/trivy_0.38.3_Linux-64bit.deb -o trivy.deb
+        sudo dpkg -i trivy.deb
+
+    - name: Run Trivy vulnerability scan
+      run: |
+        trivy image --format json --output trivy-report.json ${{ github.repository }}
+
+    - name: Upload report to GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: trivy-report
+        path: trivy-report.json
