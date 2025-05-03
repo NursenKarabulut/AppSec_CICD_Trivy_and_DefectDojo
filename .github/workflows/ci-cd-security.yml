@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install Trivy
       run: |
@@ -23,7 +23,8 @@ jobs:
         trivy fs --format json --output trivy-report.json .
 
     - name: Upload report to GitHub
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: trivy-report
         path: trivy-report.json
+
