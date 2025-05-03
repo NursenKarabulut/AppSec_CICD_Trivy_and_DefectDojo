@@ -36,5 +36,5 @@ jobs:
          -F "engagement_name=CI/CD Pipeline Scan" \
          -F "scan_type=Trivy" \
          -u "admin:admin" \
-         http://<defectdojo-ip>:8000/api/v2/import-scan/
+         http://localhost:8080/api/v2/import-scan/
 
