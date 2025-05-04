@@ -138,7 +138,7 @@ jobs:
 
 ### 📸 Screenshots
 
-- DefectDojo UI – Trivy scan uploaded
+- DefectDojo Report UI – Trivy scan Report
 
   ![image](https://github.com/user-attachments/assets/ef11c1de-3c46-4c79-9d4d-da5dd665362c)
 
@@ -147,6 +147,9 @@ jobs:
   ![image](https://github.com/user-attachments/assets/fe432311-d5ab-428e-be21-90443b01a979)
 
 - Example report
+
+  ![image](https://github.com/user-attachments/assets/b2b3d7a1-e427-472e-80bf-04b1db6555e5)
+
 ---
 
 ### 🧠 Lessons Learned
