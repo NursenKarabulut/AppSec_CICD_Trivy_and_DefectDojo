@@ -139,6 +139,9 @@ jobs:
 
 - DefectDojo UI – Trivy scan uploaded
 - CI/CD run – GitHub Actions output
+
+  ![image](https://github.com/user-attachments/assets/fe432311-d5ab-428e-be21-90443b01a979)
+
 - Example report
 ---
 
