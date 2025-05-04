@@ -21,9 +21,7 @@ This project demonstrates a hands-on Application Security (AppSec) pipeline buil
 ├── .github/                                                                                                                                                                                                                                             
 │   └── workflows/                                                                                                                                                                                                                                                               
 │       └── ci-cd-pipeline.yml                                                                  
-
 ├── OwaspJuiceFinding Report.pdf  
-
 ├── trivy-report.json                                                                                                                                      
 ├── Dockerfile                                                                                                                                                   
 └── README.md
