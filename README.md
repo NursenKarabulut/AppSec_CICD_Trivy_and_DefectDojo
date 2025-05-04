@@ -20,7 +20,10 @@ This project demonstrates a hands-on Application Security (AppSec) pipeline buil
 .                                                                                                           
 ├── .github/                                                                                                                                                                                                                                             
 │   └── workflows/                                                                                                                                                                                                                                                               
-│       └── ci-cd-pipeline.yml                                                                                                                                                   
+│       └── ci-cd-pipeline.yml                                                                  
+
+├── OwaspJuiceFinding Report.pdf  
+
 ├── trivy-report.json                                                                                                                                      
 ├── Dockerfile                                                                                                                                                   
 └── README.md
@@ -138,6 +141,9 @@ jobs:
 ### 📸 Screenshots
 
 - DefectDojo UI – Trivy scan uploaded
+
+  ![image](https://github.com/user-attachments/assets/ef11c1de-3c46-4c79-9d4d-da5dd665362c)
+
 - CI/CD run – GitHub Actions output
 
   ![image](https://github.com/user-attachments/assets/fe432311-d5ab-428e-be21-90443b01a979)
