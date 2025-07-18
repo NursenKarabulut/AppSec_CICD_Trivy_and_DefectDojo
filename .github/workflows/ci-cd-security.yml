@@ -22,19 +22,18 @@ jobs:
       run: |
         trivy fs --format json --output trivy-report.json .
 
-    - name: Upload report to GitHub
+    - name: Upload Trivy Report
       uses: actions/upload-artifact@v4
       with:
         name: trivy-report
         path: trivy-report.json
 
-
-    - name: Upload Trivy Report to DefectDojo
+    - name: Run Semgrep scan
       run: |
-         curl -X POST -F "file=@trivy-report.json" \
-         -F "product_name=Juice Shop AppSec" \
-         -F "engagement_name=CI/CD Pipeline Scan" \
-         -F "scan_type=Trivy" \
-         -u "admin:admin" \
-         http://127.0.0.1:8080/api/v2/import-scan/
+        docker run --rm -v ${{ github.workspace }}:/src returntocorp/semgrep semgrep scan --config=auto --json --output=semgrep-report.json
 
+    - name: Upload Semgrep Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: semgrep-report
+        path: semgrep-report.json
