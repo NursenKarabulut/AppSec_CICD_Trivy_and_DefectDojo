@@ -3,16 +3,18 @@
 This project demonstrates a hands-on Application Security (AppSec) pipeline built for continuous integration (CI/CD) that includes:
 
 - Vulnerable target: OWASP Juice Shop
-- Security scanner: Trivy
+- Security scanner:
+       - Trivy – vulnerability scanning for containers and filesystems
+       - Semgrep – static application security testing (SAST) and code quality analysis
 - Reporting dashboard: DefectDojo
 - Pipeline orchestration: GitHub Actions
 
 ## 📌 Objectives
 
 - Automate security scanning in a CI/CD pipeline
-- Detect real-world vulnerabilities in a vulnerable application
+- Detect real-world vulnerabilities in a vulnerable application and code quality issues  
 - Import scan results into DefectDojo for centralized reporting and management
-- Provide clear and actionable vulnerability data
+- Generate clear, actionable vulnerability and code analysis reports
 
 ---
 
@@ -21,9 +23,12 @@ This project demonstrates a hands-on Application Security (AppSec) pipeline buil
 ├── .github/                                                                                                                                                                                                                                             
 │   └── workflows/                                                                                                                                                                                                                                                               
 │       └── ci-cd-pipeline.yml                                                                  
-├── OwaspJuiceFinding Report.pdf                                                                                      
+├── Finding Report Semgrep P1.pdf   
+├── Finding Report Semgrep P2.pdf  
+├── Finding ReportTrivy.pdf  
 └── README.md                                                                                                         
-├── Trivy-report.json                                                                                                                                                                                                           
+├── Trivy-report.json  
+├── semgrep-report.json 
 
 ---
 
@@ -33,6 +38,7 @@ This project demonstrates a hands-on Application Security (AppSec) pipeline buil
 |--------------|------------------------------------|
 | GitHub Actions | CI/CD pipeline orchestration      |
 | Trivy        | Security scanning (filesystem, image) |
+| Semgrep        | Static Application Security Testing (SAST) |
 | DefectDojo   | Vulnerability management & reporting |
 | OWASP Juice Shop | Vulnerable target for AppSec testing |
 
@@ -73,14 +79,21 @@ OR for local folder:
 trivy fs ./juice-shop --format json --output trivy-report.json
 ```
 
-### 4. Upload Scan to DefectDojo (Manually)
+### 4. Run Semgrep Scan
+
+Run Semgrep container to scan the repository source code:
+```
+docker run --rm -v $(pwd):/src returntocorp/semgrep semgrep scan --config=auto --json --output=semgrep-report.json
+```
+
+### 5. Upload Scan to DefectDojo (Manually)
 
 Go to:
 
 - Engagements > Import Scan
 - Select:
     - Scan Type: Trivy
-    - File: trivy-report.json
+    - File: Trivy-report.json or semgrep-report.json
     - Product Name: Juice Shop AppSec
     - Engagement Name: CI/CD Pipeline Scan
 ---
@@ -110,13 +123,50 @@ jobs:
 
     - name: Run Trivy scan
       run: |
-        trivy fs . --format json --output trivy-report.json
+        trivy fs . --format json --output Trivy-report.json
 
     - name: Upload report to GitHub
       uses: actions/upload-artifact@v4
       with:
         name: trivy-report
-        path: trivy-report.json
+        path: Trivy-report.json
+    - name: Run Semgrep scan
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/src returntocorp/semgrep semgrep scan --config=auto --json --output=semgrep-report.json
+
+    - name: Upload Semgrep report
+      uses: actions/upload-artifact@v4
+      with:
+        name: semgrep-report
+        path: semgrep-report.json
+
+    - name: Upload Trivy report to DefectDojo
+      env:
+        DEFECTDOJO_URL: ${{ secrets.DEFECTDOJO_URL }}
+        DEFECTDOJO_USERNAME: ${{ secrets.DEFECTDOJO_USERNAME }}
+        DEFECTDOJO_PASSWORD: ${{ secrets.DEFECTDOJO_PASSWORD }}
+      run: |
+        curl -X POST \
+          -F "file=@Trivy-report.json" \
+          -F "product_name=Juice Shop AppSec" \
+          -F "engagement_name=CI/CD Pipeline Scan" \
+          -F "scan_type=Trivy" \
+          -u "${DEFECTDOJO_USERNAME}:${DEFECTDOJO_PASSWORD}" \
+          "${DEFECTDOJO_URL}/api/v2/import-scan/"
+
+    - name: Upload Semgrep report to DefectDojo
+      env:
+        DEFECTDOJO_URL: ${{ secrets.DEFECTDOJO_URL }}
+        DEFECTDOJO_USERNAME: ${{ secrets.DEFECTDOJO_USERNAME }}
+        DEFECTDOJO_PASSWORD: ${{ secrets.DEFECTDOJO_PASSWORD }}
+      run: |
+        curl -X POST \
+          -F "file=@semgrep-report.json" \
+          -F "product_name=Juice Shop AppSec" \
+          -F "engagement_name=CI/CD Pipeline Scan" \
+          -F "scan_type=Semgrep JSON Report" \
+          -u "${DEFECTDOJO_USERNAME}:${DEFECTDOJO_PASSWORD}" \
+          "${DEFECTDOJO_URL}/api/v2/import-scan/"
 ```
 --- 
 
