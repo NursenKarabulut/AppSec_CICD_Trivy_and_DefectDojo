@@ -1,4 +1,4 @@
-# 🛡️ AppSec CI/CD Pipeline with Trivy and DefectDojo
+# 🛡️ AppSec CI/CD Pipeline with Trivy, Semgrep and DefectDojo
 
 This project demonstrates a hands-on Application Security (AppSec) pipeline built for continuous integration (CI/CD) that includes:
 
