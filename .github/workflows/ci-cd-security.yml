@@ -45,9 +45,9 @@ jobs:
           -F "product_name=Juice Shop AppSec" \
           -F "engagement_name=CI/CD Pipeline Scan" \
           -F "scan_type=Trivy" \
-          -u "admin:admin" \
-          http://localhost:8000/api/v2/import-scan/
-          
+          -u "${{ secrets.DEFECTDOJO_USERNAME }}:${{ secrets.DEFECTDOJO_PASSWORD }}" \
+          ${{ secrets.DEFECTDOJO_URL }}/api/v2/import-scan/
+
     - name: Upload Semgrep Report to DefectDojo
       run: |
         curl -X POST \
@@ -55,5 +55,5 @@ jobs:
           -F "product_name=Juice Shop AppSec" \
           -F "engagement_name=CI/CD Pipeline Scan" \
           -F "scan_type=Semgrep JSON Report" \
-          -u "admin:admin" \
-          http://localhost:8000/api/v2/import-scan/
+          -u "${{ secrets.DEFECTDOJO_USERNAME }}:${{ secrets.DEFECTDOJO_PASSWORD }}" \
+          ${{ secrets.DEFECTDOJO_URL }}/api/v2/import-scan/
